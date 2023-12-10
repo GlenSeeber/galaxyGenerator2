@@ -1,9 +1,9 @@
-package Space;
-
-import random.*;
+package space;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import myRand.*;
 
 public class Galaxy extends Place {
     private List<Place> stars;
@@ -16,6 +16,8 @@ public class Galaxy extends Place {
 
         //TODO: generate name
         name = "foo";
+
+        details = new Descriptor();
 
         this.starCount = starCount;
         for (int i = 0; i < starCount; ++i) {

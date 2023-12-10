@@ -1,0 +1,109 @@
+package myRand;
+
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
+
+//technically it's not a normal distribution, it's a distribution based on a cosine curve, check out
+// the function curve() if you're curious.
+
+//functionality is so far not been tested, but it seems to look good on paper
+
+//TODO: please test this, for the love of god if something isn't working know that this has never been tested.
+public class NormalDistribution {
+
+    double endpoint;
+    double startpoint;
+    double mean;
+    double sd;
+    double boxSize;
+
+    private int boxes;
+
+    double[] dist;
+
+/*
+    public NormalDistribution(){
+        NormalDistribution(0.0, 1.0, 0.01);
+    }
+*/
+    //boxSize should be positive
+    public NormalDistribution(double mean, double sd){
+        this.mean = mean;
+        this.sd = sd;
+        
+        boxes = 200;
+        
+        this.boxSize = 2.0 / boxes;
+        System.out.printf("boxSize = %1.2f\n", boxSize);
+
+        double[] outputs = new double[boxes];
+
+        //this is kind of like a Riemann Sum, but not quite.
+        for (int i = 0; i < boxes; ++i) {
+            double input = (i * boxSize) - 1;
+            outputs[i] = curve(input);
+            
+            if (i > 0){
+                outputs[i] += outputs[i-1];
+            }
+        }
+
+        /*
+         * cool solution to make this code look way less awful and probably reduce runtime (idk??):
+         * 
+         * remove the outputs[] list. Do a for loop for all values 0 < i < 100 (any power of 10 really, 100 works well enough)
+         * for each value, just set dist[i] = curve(i) (but adjust i in the function to not actually be outside the domain).
+         * 
+         * the next() function stays unchanged, you just reduce work and code required to get that dist[] array.
+         */
+
+         //that wouldn't work ^^, this guy was smoking crack lol (it's me, i was up late working on this and brain didn't think)
+
+        dist = fixDist(outputs);
+    }
+
+    //you need to turn the outputs[] thing from this:
+    //   0    1            2                        3
+    // |---|------|-----------------|-------------------------------|
+    //         into this:
+    //  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20
+    // |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
+
+    public double[] fixDist(double[] arr){
+        double[] dist = new double[boxes];
+        // `n` only changes when f(x) for the curve changes value, but the new array will hold many duplicate values given different inputs `i`
+        int n = 0;
+        for(int i = 0; i < boxes; ++i){
+            dist[i] = arr[n];
+            //increment `n` if `i` is greater than the output of the function (after accounting for x100 factor)
+            if (i > (arr[n] * 100)){
+                ++n; 
+            }
+        }
+        return dist;
+    }
+
+    //domain [-1, 1]
+    //graph it if you're curious, it looks close enough to Normal Distribution to work for our purposes
+    public double curve(double x){
+        double output = (Math.cos(Math.PI * x) + 1)/2;
+        if (x < -1 || x > 1){
+            System.err.printf("Input [%1.2f] for curve() is outside domain (returns %1.2f). Proceeding anyways...\n", x, output);
+        }
+        return output;
+
+    }
+
+    //returns a random double from a NormalDistribution
+    public double next(){
+        //n = randInt("between [0, boxes)")
+        int n = ThreadLocalRandom.current().nextInt(0, boxes);
+
+        return dist[n] * 5;
+    }
+
+    public static void main(String[] args) {
+        
+    }
+
+}

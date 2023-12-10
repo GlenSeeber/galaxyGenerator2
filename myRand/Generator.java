@@ -1,4 +1,4 @@
-package random;
+package myRand;
 
 import java.util.List;
 

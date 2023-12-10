@@ -1,4 +1,4 @@
-package random;
+package myRand;
 
 public class Numbers {
     public static int getRandomStarCount(){

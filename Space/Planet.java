@@ -1,4 +1,4 @@
-package Space;
+package space;
 
 import java.util.List;
 
@@ -30,6 +30,8 @@ public class Planet extends Place {
             this.orbit = orbit;
             this.orbitRadius = orbitRadius;
         }
+
+        details = new Descriptor(super.getDescriptorObject());
     }
 
     /**

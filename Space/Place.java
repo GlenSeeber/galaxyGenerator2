@@ -1,8 +1,8 @@
-package Space;
+package space;
 
 public abstract class Place {
     String name;
-    Object stuff;
+    Descriptor details;
     
     Place parent;
     boolean hasParent = true;
@@ -10,7 +10,7 @@ public abstract class Place {
     public String getName(){
         return name;
     }
-    public Object getDescriptorObject(){    //the object that has all the special stats and things.
-        return stuff;
+    public Descriptor getDescriptorObject(){    //the object that has all the special stats and things.
+        return details;
     }
 }
