@@ -34,4 +34,11 @@ public class Galaxy extends Place {
         //TODO: generate random number of stars
         this(12, "myGalaxy");
     }
+
+    @Override
+    public String generateReport(){
+        String output = String.format("Name: %s\nStar Count: %d\n\n" + super.generateReport(), name, starCount);
+
+        return output;
+    }
 }

@@ -38,7 +38,9 @@ public class Descriptor {
     //get an array of all values that are just a single number
     double indexables[] = {economicIndex, domesticTrade, foreignTrade, exports, imports, stability, acceptance,
         communitySize, multiculturalism, travel};
-
+    
+    String indexableNames[] = {"Economic Index", "Domestic Trade", "Foreign Trade", "Exports", "Imports", "Economic Stability", "Social Acceptance",
+        "Community Size", "Multiculturalism", "Travel"};
 
 
     //assign each variable with the same starting value `val`.
@@ -73,11 +75,11 @@ public class Descriptor {
     /**
      * @returns a random integer in the range [min, max).
      */
-    private int randInt(int min, int max){
+    public static int randInt(int min, int max){
         return ThreadLocalRandom.current().nextInt(min, max);
     }
     
-    private double randDouble(double min, double max){
+    public static double randDouble(double min, double max){
         //generate random number between 0 and 1;
         double r = ThreadLocalRandom.current().nextDouble();
         //the distance currently is 1. Make it into whatever distance between min and max is.

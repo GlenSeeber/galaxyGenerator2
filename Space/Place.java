@@ -25,6 +25,11 @@ public abstract class Place {
             + "That's okay, for now, just take a list of the values from the indexables list from the Descriptor:\n\n"
             + "Name: " + name + "\n\n"
             + Arrays.toString(details.indexables);
+
+        output = "";
+        for (int i = 0; i < details.indexables.length; i++) {
+            output += String.format("%s: %2.2f\n", details.indexableNames[i], details.indexables[i]);
+        }
         
         return output;
     }

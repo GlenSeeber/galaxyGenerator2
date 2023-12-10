@@ -37,4 +37,19 @@ public class Star extends Place {
         //so we can access the list when generalizing as a Place object
         children = planets;
     }
+
+    @Override
+    public String generateReport() {
+        String output = String.format("Name: %s\nNumber of Planets: %d\n\n"
+        + "Planet names (closest to farthest from sun):\n", name, planetCount);
+
+        for (int i = 0; i < planets.size(); i++) {
+            output += String.format("    %d) %s\n", i+1, planets.get(i).name);
+        }
+        output += "\n";
+
+        output += super.generateReport();
+
+        return output;
+    }
 }
