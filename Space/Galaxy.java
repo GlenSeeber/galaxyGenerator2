@@ -9,30 +9,25 @@ public class Galaxy extends Place {
 
     public Galaxy(int starCount, String name){
         this.name = name;
+        //Galaxies don't belong to another, larger group of things
+        hasParent = false;
+        //create a descriptor for the galaxy
+        details = new Descriptor();
 
-        hasParent = false;  //Galaxies don't belong to another, larger group of things
-
-        stars = new ArrayList<Place>();
-
-        //TODO: generate name
-        name = "foo";
-
-        details = new Descriptor(5.0);
-
+        //create the Stars within the Galaxy
+        children = new ArrayList<Place>();  //use the `children` List object included in the `Place` class
         this.starCount = starCount;
         for (int i = 0; i < starCount; ++i) {
-            Star myStar = new Star(this);    //TODO: change to `new Star();`
+            Star myStar = new Star(this);
             myStar.name = "Star"+i;
-            stars.add(myStar);
+            children.add(myStar);
 
         }
-        //So that we can access this list when generalizing as just a Place object
-        children = stars;
     }
 
+    //generate a galaxy called 'myGalaxy' with a random number of stars between [5, 26]
     public Galaxy(){
-        //TODO: generate random number of stars
-        this(12, "myGalaxy");
+        this(Descriptor.randInt(5, 27), "myGalaxy");
     }
 
     @Override

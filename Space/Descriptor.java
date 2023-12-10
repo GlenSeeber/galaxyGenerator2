@@ -14,18 +14,11 @@ public class Descriptor {
     
     //ECONOMICS
     double economicIndex;   //general index of economic power
-    double domesticTrade;   //how much they trade among themselves 
-    //(whatever layer this applies to. This will count for foreign trade 1 layer deeper.)
-
-    double foreignTrade;    //how much do they trade with places outside themselves
     double exports; //how much do they export goods (as opposed to being a buyer of imports)
-    double imports; //how much do they import goods (as opposed to selling their own goods)
-    double stability;   //how long their economy can last without going through major crisis
 
     //SOCIAL
     double acceptance;  //acceptance of minority groups and "others"
     double communitySize;   //small towns, or sprawling cities?
-    double multiculturalism;    //how much do they integrate different cultures?
     double travel;  //how often do folks from here visit other places? How likely are you to find someone from here to be very far from home?
 
     //DEMOGRAPHICS
@@ -36,11 +29,9 @@ public class Descriptor {
     List<String> languages; //the actual languages
     
     //get an array of all values that are just a single number
-    double indexables[] = {economicIndex, domesticTrade, foreignTrade, exports, imports, stability, acceptance,
-        communitySize, multiculturalism, travel};
-    
-    String indexableNames[] = {"Economic Index", "Domestic Trade", "Foreign Trade", "Exports", "Imports", "Economic Stability", "Social Acceptance",
-        "Community Size", "Multiculturalism", "Travel"};
+    double indexables[] = {economicIndex, exports, acceptance, communitySize, travel};
+    //and descriptive names for each variable
+    String indexableNames[] = {"Economic Index", "Exports", "Social Acceptance", "Community Size", "Travel"};
 
 
     //assign each variable with the same starting value `val`.
@@ -50,9 +41,9 @@ public class Descriptor {
         }
     }
 
-    //assign each variable with the starting value 5.0
+    //start the descriptor out randomly deviated from 5.0 on all values (so the galaxy stats don't look boring/unnatural)
     public Descriptor(){
-        this(5.0);
+        this(new Descriptor(5.0));
     }
 
     //assign each variable randomly, deviating slightly from the parent descriptor (based on the value of `diff`).
