@@ -61,7 +61,7 @@ public class Descriptor {
 
             //gets a random number within the range. We're using int's here, so multiply by 100 to get it in cents
                 //then do float division by 100 to get a double value of reasonable precision.
-            indexables[i] = randDouble(parentVal - diff, parentVal + diff);
+            indexables[i] = randDouble((parentVal - diff), (parentVal + diff + 1));
         }
     }
 

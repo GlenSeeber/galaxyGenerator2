@@ -3,13 +3,13 @@ package space;
 import java.util.ArrayList;
 import java.util.List;
 
-import myRand.*;
-
 public class Galaxy extends Place {
-    private List<Place> stars;
-    private int starCount;
+    List<Place> stars;
+    int starCount;
 
-    public Galaxy(int starCount){
+    public Galaxy(int starCount, String name){
+        this.name = name;
+
         hasParent = false;  //Galaxies don't belong to another, larger group of things
 
         stars = new ArrayList<Place>();
@@ -17,25 +17,21 @@ public class Galaxy extends Place {
         //TODO: generate name
         name = "foo";
 
-        details = new Descriptor();
+        details = new Descriptor(5.0);
 
         this.starCount = starCount;
         for (int i = 0; i < starCount; ++i) {
-            Place myStar = new Galaxy();    //TODO: change to `new Star();`
+            Star myStar = new Star(this);    //TODO: change to `new Star();`
+            myStar.name = "Star"+i;
             stars.add(myStar);
+
         }
+        //So that we can access this list when generalizing as just a Place object
+        children = stars;
     }
 
     public Galaxy(){
         //TODO: generate random number of stars
-        this(Numbers.getRandomStarCount());
-    }
-
-    public List<Place> getStars() {
-        return stars;
-    }
-
-    public int getStarCount() {
-        return starCount;
+        this(12, "myGalaxy");
     }
 }

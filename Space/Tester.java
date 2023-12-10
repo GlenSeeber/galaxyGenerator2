@@ -1,15 +1,27 @@
 package space;
 
-import java.util.Arrays;
 
 public class Tester {
+
     public static void main(String[] args) {
-        Descriptor galaxy = new Descriptor(5.0);
+        Galaxy milkyWay = new Galaxy();
+        
+
+    }
+
+    /*
+    public void printDescriptors(){
+        galaxy = new Descriptor(5.0);
         double[] nums = galaxy.getIndexables();
 
-        System.out.printf("Galaxy:\n%s\n\n", Arrays.toString(nums));
+        System.out.println("Galaxy:");
+        for (double d : nums) {
+            System.out.printf("%2.2f, ", d);
+        }
+        System.out.println("\n");
 
-        Descriptor star = new Descriptor(galaxy);
+
+        star = new Descriptor(galaxy);
         nums = star.getIndexables();
 
         System.out.println("Stars:");
@@ -18,7 +30,7 @@ public class Tester {
         }
         System.out.println("\n");
 
-        Descriptor planet = new Descriptor(star);
+        planet = new Descriptor(star);
         nums = planet.getIndexables();
 
         System.out.println("Planet:");
@@ -27,5 +39,15 @@ public class Tester {
         }
         System.out.println("\n");
 
+        city = new Descriptor(planet);
+        nums = city.getIndexables();
+
+        System.out.println("City:");
+        for (double d : nums) {
+            System.out.printf("%2.2f, ", d);
+        }
+        System.out.println("\n");
     }
+    */
+
 }
