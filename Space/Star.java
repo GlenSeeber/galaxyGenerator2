@@ -12,8 +12,11 @@ public class Star extends Place {
     Vector position;    //(x, y) position in the galaxy 
     int layer;  // height "z position", snapped to either -1, 0, or 1 to reduce difficulty for mental math.
 
-    public Star(Place parent){
+    public Star(Place parent, String name){
+        super(parent);
         this.parent = parent;   //identify the parent object
+
+        this.name = name;
 
         planetCount = 5;
 
@@ -26,11 +29,13 @@ public class Star extends Place {
         //create a Descriptor for the Star system
         details = new Descriptor(parent.details);
 
+        //assign language and racial demographics
+        doStats();
+
         //generate a list of Planets
         for (int i = 0; i < planetCount; ++i){
 
-            Planet myPlanet = new Planet(this, i);
-            myPlanet.name = "Planet"+i;
+            Planet myPlanet = new Planet(this, i, "Planet "+i);
             planets.add(myPlanet);
         }
 

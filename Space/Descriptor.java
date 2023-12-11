@@ -1,6 +1,8 @@
 package space;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Descriptor {
@@ -22,12 +24,13 @@ public class Descriptor {
     double travel;  //how often do folks from here visit other places? How likely are you to find someone from here to be very far from home?
 
     //DEMOGRAPHICS
-    List<Double> raceDemographic;   //percentages of each race, should add up to ~100%
-    List<String> races; //the actual races those demographics reference, indexes correspond.
-    
-    List<Double> languageDemographic; //language percentages
-    List<String> languages; //the actual languages
-    
+
+    //The languages spoken here, and the percentage at which they are spoken by the population (should add up to 100%)
+    Map<String, Double> languageDemographics = new HashMap<String, Double>();
+
+    //The races and percentages that they make up the area (should add up to 100%)
+    Map<String, Double> racialDemographics = new HashMap<String, Double>();
+
     //get an array of all values that are just a single number
     double indexables[] = {economicIndex, exports, acceptance, communitySize, travel};
     //and descriptive names for each variable
@@ -56,6 +59,9 @@ public class Descriptor {
                 //then do float division by 100 to get a double value of reasonable precision.
             indexables[i] = randDouble((parentVal - diff), (parentVal + diff + 1));
         }
+
+        languageDemographics = parentDescriptor.languageDemographics;
+        racialDemographics = parentDescriptor.racialDemographics;
     }
 
     public double[] getIndexables() {
@@ -64,12 +70,19 @@ public class Descriptor {
 
 
     /**
+     * @param min
+     * @param max
      * @returns a random integer in the range [min, max).
      */
     public static int randInt(int min, int max){
         return ThreadLocalRandom.current().nextInt(min, max);
     }
     
+    /**
+     * @param min
+     * @param max
+     * @returns a random double in the range [`min`, `max`]
+     */
     public static double randDouble(double min, double max){
         //generate random number between 0 and 1;
         double r = ThreadLocalRandom.current().nextDouble();

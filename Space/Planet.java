@@ -45,7 +45,11 @@ public class Planet extends Place {
      * @param orbit the orbit number (mercury, venus, earth, mars, ...) == (0, 1, 2, 3, ...)
      * @param orbitRadius the avg distance (radius) from the planet/orbit to the sun
      */
-    public Planet(Place parent, int orbit){
+    public Planet(Place parent, int orbit, String name){
+        super(parent);
+
+        this.name = name;
+
         this.parent = parent;
         this.isSun = false;
         this.orbitNumber = orbit;
@@ -54,6 +58,9 @@ public class Planet extends Place {
 
         //random number between [2, 6]
         massIndex = Descriptor.randInt(2, 6 + 1);
+
+        //assign language and racial demographics
+        doStats();
     }
 
     /**
@@ -61,6 +68,8 @@ public class Planet extends Place {
      * @param parent The Star object it belongs to.
      */
     public Planet(Place parent){
+        super(parent);
+
         this.parent = parent;
         this.isSun = true;
 
@@ -70,6 +79,11 @@ public class Planet extends Place {
         }else{ //otherwise just make it a sun
             massIndex = 7;
         }
+
+        //doStats() is intentionally not put in this constructor
+        //same for the details object
+        //most suns don't have a population living on them.
+        details = null;
     }
     
     @Override
@@ -82,8 +96,10 @@ public class Planet extends Place {
         }
         
         String output = String.format("Name: %s\n%s\nObject is about %s\n\n", name, sunInfo, massInfo[massIndex]);
-
-        output += super.generateReport();
+        if (!isSun){
+            //super.generateReport() only references the details object, which sun Planets do not have
+            output += super.generateReport();
+        }
 
         return output;
     }
