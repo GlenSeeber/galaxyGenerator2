@@ -6,7 +6,6 @@ import java.util.List;
 import culture.Defaults;
 
 public class Galaxy extends Place {
-    List<Place> stars;
     int starCount;
 
     //this is a list of all languages that exist within the galaxy

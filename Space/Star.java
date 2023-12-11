@@ -19,6 +19,7 @@ public class Star extends Place {
         this.name = name;
 
         planetCount = 5;
+        children = new ArrayList<Place>();
 
         //create a new Planet that is a sun;
         sun = new Planet(this);
@@ -36,11 +37,8 @@ public class Star extends Place {
         for (int i = 0; i < planetCount; ++i){
 
             Planet myPlanet = new Planet(this, i, "Planet "+i);
-            planets.add(myPlanet);
+            children.add(myPlanet);
         }
-
-        //so we can access the list when generalizing as a Place object
-        children = planets;
     }
 
     @Override
@@ -48,8 +46,8 @@ public class Star extends Place {
         String output = String.format("Name: %s\nNumber of Planets: %d\n\n"
         + "Planet names (closest to farthest from sun):\n", name, planetCount);
 
-        for (int i = 0; i < planets.size(); i++) {
-            output += String.format("    %d) %s\n", i+1, planets.get(i).name);
+        for (int i = 0; i < children.size(); i++) {
+            output += String.format("    %d) %s\n", i+1, children.get(i).name);
         }
         output += "\n";
 

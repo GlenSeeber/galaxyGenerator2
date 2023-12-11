@@ -58,6 +58,12 @@ public abstract class Place {
         int size = statList.size();
         writeTo = new HashMap<String,Double>(parentDemographic);
         List<String> newStats = new ArrayList<String>();
+        double diff = 0.0;
+        
+        if(this.getClass() != new Planet(galaxy).getClass()){
+            System.out.printf("\nObject Name: %s, Parent: %s\n-----------------------\n", name, parent.name);
+        }
+
         //5 random stats
         for(int i = 0; i < writeTo.size(); ++i){
             double percent;
@@ -66,8 +72,9 @@ public abstract class Place {
             if(Descriptor.randDouble(0.0, 1.0) < 0.2){
                 //delete a random value
                 String removeVal = randomInSet(writeTo.keySet(), 1).get(0);
-                System.out.printf("removing '%s' from `writeTo`\n", removeVal);
-                writeTo.remove(removeVal);
+                
+                
+                diff += writeTo.remove(removeVal);
                 
                 //get the percentage for the new stat
                 percent = randomPercentage(i, percentLeft);
@@ -80,6 +87,11 @@ public abstract class Place {
                     myStat = statList.get(Descriptor.randInt(0, size));
                 } while (writeTo.containsKey(myStat));
 
+                if(this.getClass() != new Planet(galaxy).getClass()){
+                    System.out.printf("  Removing '%s' (%2.2f). Replacing it with '%s' (%2.2f)\n", 
+                        removeVal, writeTo.get(removeVal), myStat, percent);
+                }
+
                 //add the new stat to the list newStats
                 newStats.add(myStat);
 
@@ -89,42 +101,66 @@ public abstract class Place {
         }
 
         //iterate through the demographic map and deviate the stats borrowed from parent object
-        double diff = 0.0;
         int remaining = writeTo.size();
+        double total = 0.0;
         for (String key : writeTo.keySet()) {
+            
             //decrement remaining counter
             remaining--;
 
-            //don't mess with new stats
+            double newVal;
+
+            //if it's a new stat (ie the random value was already generated)
             if(newStats.contains(key)){
-                System.out.printf("Skipping this stat (contents of newStats:  %s\n"+
-                    "\tname: %s\n"+
-                    "\tparent: %s\n\n", 
-                    Arrays.toString(newStats.toArray()), name, parent.name);
-                continue;
+                //System.out.printf("Skipping this stat (contents of newStats:  %s\n"+
+                //    "\tname: %s\n"+
+                //    "\tparent: %s\n\n", 
+                //    Arrays.toString(newStats.toArray()), name, parent.name);
+                newVal = writeTo.get(key);
+                if(this.getClass() != new Planet(galaxy).getClass()){
+                    System.out.printf("  New value '%s' (%2.2f) added.\nTotal: %2.2f\n\n", key, writeTo.get(key), total);
+                }
             }
-            
-
-            //max change should be either 90% of original value, or 90% of 25 (so that if the value is 26 we don't reduce it by more than 90%)
-            double max;
-            double ratioOfChange = 0.9; //a value can't change by more than 0.9x it's original value
-            if(writeTo.get(key) > 25.0){
-                max = 25.0 * ratioOfChange;
-            } else {
-                max = writeTo.get(key) * ratioOfChange;
+            //if it's not new (just slightly deviated from the previous iteration)
+            else{
+                //max change should be either 90% of original value, or 90% of 25 (so that if the value is 26 we don't reduce it by more than 90%)
+                double max;
+                double ratioOfChange = 0.9; //a value can't change by more than 0.9x it's original value
+                if(writeTo.get(key) > 25.0){
+                    max = 25.0 * ratioOfChange;
+                } else {
+                    max = writeTo.get(key) * ratioOfChange;
+                }
+    
+                //generate value
+                double change = Descriptor.randDouble(-1 * max, max);
+                newVal = writeTo.get(key) + change;
             }
 
-            //generate value
-            double change = Descriptor.randDouble(-1 * max, max);
-
-            //ensure that all values add up to 100% by messing with the final result a bit
-            if(remaining == 0){
-                change = -1 * diff;
+            //ensure we don't hit over 100% or have negative values
+            if(total + newVal > 80.0){
+                //if this is the last value, just make it equal to whatever room is left in the percentage
+                if(remaining == 0){
+                    newVal = 100.0 - total;
+                }
+                //if it's not the last one, make the value (about, but not exactly) half of the remaining amount
+                else{
+                    newVal = (100.0 - total) / 2.1;
+                }
             }
-            diff += change;
+            total += newVal;
+
+            //don't print debug info for planets
+            if(this.getClass() != new Planet(galaxy).getClass()){
+                System.out.printf(
+                    "  Adding key '%s' (%2.2f) to total\n"+ 
+                    "  total          = %2.2f\n" +
+                    "  percent left   = %2.2f\n\n", 
+                    key, newVal, total, 100.0 - total);
+            }
 
             //change the value by the calculated amount
-            writeTo.put(key, writeTo.get(key) + change);
+            writeTo.put(key, newVal);
         }
 
         return writeTo;
